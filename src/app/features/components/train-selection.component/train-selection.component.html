@@ -1,0 +1,37 @@
+<div class="trains-container">
+  <header class="results-header">
+    <h3>მატარებლის რეისები: {{ travelDate | date: 'dd/MM/yyyy' }}</h3>
+  </header>
+
+  <div class="train-list">
+    @for (train of trains; track train.id) {
+      <div class="train-card">
+        <div class="train-info">
+          <span class="train-number">რეისი №{{ train.number }}</span>
+          <div class="route">
+            <strong>{{ train.from }}</strong>
+            <i class="arrow">→</i>
+            <strong>{{ train.to }}</strong>
+          </div>
+        </div>
+
+        <div class="time-info">
+          <div class="time-block">
+            <span class="label">გასვლა:</span>
+            <span class="time">{{ train.departure }}</span>
+          </div>
+          <div class="time-block">
+            <span class="label">ჩასვლა:</span>
+            <span class="time">{{ train.arrive }}</span>
+          </div>
+        </div>
+
+        <button class="book-btn" (click)="onSelectTrain(train.id)">დაჯავშნა</button>
+      </div>
+    } @empty {
+      <div class="no-results">
+        <p>მითითებულ თარიღზე რეისები ვერ მოიძებნა.</p>
+      </div>
+    }
+  </div>
+</div>

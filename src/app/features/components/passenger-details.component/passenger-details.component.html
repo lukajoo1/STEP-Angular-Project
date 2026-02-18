@@ -1,0 +1,42 @@
+<div class="booking-container">
+  @if (train) {
+    <div class="train-summary">
+      <h2>რეისი №{{ train.number }} ({{ train.from }} - {{ train.to }})</h2>
+      <p>გამგზავრება: {{ train.departure }} | ჩასვლა: {{ train.arrive }}</p>
+    </div>
+
+    <div class="vagon-selector">
+      <h3>აირჩიეთ ვაგონი:</h3>
+      <div class="vagon-tabs">
+        @for (vagon of train.vagons; track vagon.id) {
+          <button
+            [class.active]="selectedVagon?.id === vagon.id"
+            (click)
+            Small
+            Step="selectVagon(vagon)"
+          >
+            {{ vagon.name }}
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (selectedVagon) {
+      <div class="seat-picker">
+        <h3>ადგილები - {{ selectedVagon.name }}</h3>
+        <div class="seat-grid">
+          @for (seat of selectedVagon.seats; track seat.number) {
+            <div
+              class="seat"
+              [class.occupied]="!seat.isAvailable"
+              [class.selected]="selectedSeat === seat.number"
+              (click)="onSeatClick(seat)"
+            >
+              {{ seat.number }}
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,129 @@
+.trains-container {
+  max-width: 90rem;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .results-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3498db;
+
+    h3 {
+      color: #2c3e50;
+      font-size: 2.4rem;
+      margin: 0;
+    }
+  }
+
+  .train-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .train-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    border: 1px solid #eee;
+
+    &:hover {
+      transform: translateY(-0.3rem);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .train-info {
+      .train-number {
+        display: block;
+        font-size: 1.4rem;
+        color: #7f8c8d;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .route {
+        font-size: 1.8rem;
+        color: #2c3e50;
+
+        .arrow {
+          color: #3498db;
+          margin: 0 1rem;
+          font-style: normal;
+        }
+      }
+    }
+
+    .time-info {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+
+      .time-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .label {
+          font-size: 1.2rem;
+          color: #95a5a6;
+          text-transform: uppercase;
+        }
+
+        .time {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #2c3e50;
+        }
+      }
+    }
+
+    .book-btn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 1.2rem 2rem;
+      border-radius: 8px;
+      font-size: 1.6rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      justify-self: end;
+
+      &:hover {
+        background-color: #219150;
+      }
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.5rem;
+
+      .time-info {
+        margin: 1rem 0;
+      }
+
+      .book-btn {
+        justify-self: center;
+        width: 100%;
+      }
+    }
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 5rem;
+    background: #fff;
+    border-radius: 12px;
+    color: #7f8c8d;
+    font-size: 1.8rem;
+  }
+}
