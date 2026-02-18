@@ -57,6 +57,13 @@ export class TrainSelectionComponent implements OnInit {
   }
 
   onSelectTrain(trainId: number) {
-    this.router.navigate(['/passengers'], { queryParams: { trainId: trainId } });
+    const currentParams = this.route.snapshot.queryParams;
+
+    this.router.navigate(['/passengers'], {
+      queryParams: {
+        trainId: trainId,
+        passengers: currentParams['ticketCount'],
+      },
+    });
   }
 }

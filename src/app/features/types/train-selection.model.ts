@@ -32,3 +32,26 @@ export interface TrainSelectionModelResponse {
     },
   ];
 }
+
+export interface SeatResponse {
+  id: number;
+  seatNumber: number;
+  isAvailable: boolean;
+}
+
+export interface CarriageResponse {
+  id: number;
+  name: string;
+  type: string;
+  seats: SeatResponse[] | null;
+}
+
+export interface TrainResponse {
+  id: number;
+  trainNumber: string;
+  from: string;
+  to: string;
+  departureTime: string;
+  arrivalTime: string;
+  carriages: CarriageResponse[];
+}

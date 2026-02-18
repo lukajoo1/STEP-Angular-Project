@@ -1,42 +1,142 @@
 <div class="booking-container">
   @if (train) {
-    <div class="train-summary">
-      <h2>რეისი №{{ train.number }} ({{ train.from }} - {{ train.to }})</h2>
-      <p>გამგზავრება: {{ train.departure }} | ჩასვლა: {{ train.arrive }}</p>
-    </div>
+    <header class="train-summary-card">
+      <div class="summary-content">
+        <div class="train-main">
+          <h2>რეისი №{{ train.number }}</h2>
+          <div class="route-display">
+            <span class="city">{{ train.from }}</span>
+            <i class="arrow-icon">→</i>
+            <span class="city">{{ train.to }}</span>
+          </div>
+        </div>
+        <div class="train-times">
+          <div class="time-box">
+            <span class="label">გასვლა</span>
+            <span class="val">{{ train.departure }}</span>
+          </div>
+          <div class="time-box">
+            <span class="label">ჩასვლა</span>
+            <span class="val">{{ train.arrive }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <div class="vagon-selector">
-      <h3>აირჩიეთ ვაგონი:</h3>
+    <section class="vagon-section">
+      <div class="section-header">
+        <h3 class="section-title">აირჩიეთ ვაგონის კლასი</h3>
+      </div>
       <div class="vagon-tabs">
         @for (vagon of train.vagons; track vagon.id) {
           <button
+            type="button"
+            class="vagon-btn"
             [class.active]="selectedVagon?.id === vagon.id"
-            (click)
-            Small
-            Step="selectVagon(vagon)"
+            (click)="selectVagon(vagon)"
           >
             {{ vagon.name }}
           </button>
         }
       </div>
-    </div>
+    </section>
 
-    @if (selectedVagon) {
-      <div class="seat-picker">
-        <h3>ადგილები - {{ selectedVagon.name }}</h3>
-        <div class="seat-grid">
-          @for (seat of selectedVagon.seats; track seat.number) {
-            <div
-              class="seat"
-              [class.occupied]="!seat.isAvailable"
-              [class.selected]="selectedSeat === seat.number"
-              (click)="onSeatClick(seat)"
-            >
-              {{ seat.number }}
-            </div>
-          }
+    <div class="booking-grid">
+      <section class="seat-picker-section">
+        <h3 class="section-title">ვაგონის სქემა</h3>
+
+        <div class="train-carriage">
+          <div class="seats-grid">
+            @for (seat of selectedVagon?.seats; track seat.number) {
+              <button
+                class="seat-item"
+                [class.occupied]="!seat.isAvailable"
+                [class.selected]="selectedSeats.includes(seat.number)"
+                [disabled]="!seat.isAvailable"
+                (click)="onSeatClick(seat)"
+              >
+                {{ seat.number }}
+              </button>
+            }
+          </div>
         </div>
+
+        <div class="legend">
+          <div class="item"><span class="box available"></span> თავისუფალი</div>
+          <div class="item"><span class="box selected"></span> არჩეული</div>
+          <div class="item"><span class="box taken"></span> დაკავებული</div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        @if (selectedSeats.length > 0) {
+          <div class="passenger-card animate-fade-in">
+            <h3 class="section-title">მგზავრის მონაცემები</h3>
+            <p class="seat-info">
+              არჩეული ადგილები: <strong>{{ selectedSeats.join(', ') }}</strong>
+            </p>
+
+            <form [formGroup]="passengerForm" (ngSubmit)="confirmBooking()" class="booking-form">
+              <div class="form-group">
+                <label>სახელი</label>
+                <input type="text" formControlName="firstName" placeholder="მაგ: გიორგი" />
+              </div>
+
+              <div class="form-group">
+                <label>გვარი</label>
+                <input type="text" formControlName="lastName" placeholder="მაგ: ბერიძე" />
+              </div>
+
+              <div class="form-group">
+                <label>პირადი ნომერი</label>
+                <input
+                  type="text"
+                  formControlName="personalId"
+                  maxlength="11"
+                  placeholder="11 ციფრი"
+                />
+              </div>
+
+              <div class="price-summary">
+                <div class="price-row">
+                  <span>ბილეთების რაოდენობა:</span>
+                  <span>{{ selectedSeats.length }}</span>
+                </div>
+                <div class="price-row total">
+                  <span>სულ გადასახდელი:</span>
+                  <span class="amount">{{ totalPrice }} ₾</span>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-booking-btn" [disabled]="passengerForm.invalid">
+                დაჯავშნა
+              </button>
+            </form>
+          </div>
+        } @else {
+          <div class="form-placeholder">
+            <p>გთხოვთ, აირჩიოთ მინიმუმ 1 ადგილი</p>
+          </div>
+        }
+      </section>
+    </div>
+  }
+
+  @if (isBooked) {
+    <div class="modal-overlay">
+      <div class="success-modal">
+        <div class="icon">✔</div>
+        <h2>წარმატებით დაიჯავშნა!</h2>
+        <div class="ticket-details">
+          <p>
+            <strong>მგზავრი:</strong> {{ passengerForm.value.firstName }}
+            {{ passengerForm.value.lastName }}
+          </p>
+          <p><strong>ადგილები:</strong> {{ selectedSeats.join(', ') }}</p>
+          <p class="final-price"><strong>ჯამური ფასი:</strong> {{ totalPrice }} ₾</p>
+        </div>
+        <button class="close-btn" (click)="closeModal()">მთავარზე დაბრუნება</button>
       </div>
-    }
+    </div>
   }
 </div>

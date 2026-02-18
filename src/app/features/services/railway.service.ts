@@ -26,4 +26,8 @@ export class Railway {
   getTrainById(id: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/trains/${id}`);
   }
+
+  getVagonSeats(vagonId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/vagons/${vagonId}/seats`);
+  }
 }
