@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Railway } from '../../services/railway.service';
 import { DatePipe } from '@angular/common';
@@ -11,7 +11,7 @@ import { TrainSelectionModelResponse } from '../../types/train-selection.model';
   styleUrl: './train-selection.component.scss',
 })
 export class TrainSelectionComponent implements OnInit {
-  trains: TrainSelectionModelResponse[] = [];
+  trains = signal<TrainSelectionModelResponse[]>([]);
   travelDate: string = '';
 
   private route = inject(ActivatedRoute);
@@ -31,13 +31,15 @@ export class TrainSelectionComponent implements OnInit {
   loadTrains(fromName: string, toName: string, travelDate: string) {
     this.railwayService.getTrains(fromName, toName, travelDate).subscribe((data) => {
       const selectedDay = this.getGeorgianDay(travelDate);
-      this.trains = data.filter((train) => {
-        const matchFrom = train.from.trim().toLowerCase() === fromName.trim().toLowerCase();
-        const matchTo = train.to.trim().toLowerCase() === toName.trim().toLowerCase();
-        const matchDay = train.date.trim() === selectedDay;
+      this.trains.set(
+        data.filter((train) => {
+          const matchFrom = train.from.trim().toLowerCase() === fromName.trim().toLowerCase();
+          const matchTo = train.to.trim().toLowerCase() === toName.trim().toLowerCase();
+          const matchDay = train.date.trim() === selectedDay;
 
-        return matchFrom && matchTo && matchDay;
-      });
+          return matchFrom && matchTo && matchDay;
+        }),
+      );
       this.cdr.detectChanges();
     });
   }

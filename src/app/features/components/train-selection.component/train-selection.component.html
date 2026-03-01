@@ -4,7 +4,7 @@
   </header>
 
   <div class="train-list">
-    @for (train of trains; track train.id) {
+    @for (train of trains(); track train.id) {
       <div class="train-card">
         <div class="train-info">
           <span class="train-number">რეისი №{{ train.number }}</span>

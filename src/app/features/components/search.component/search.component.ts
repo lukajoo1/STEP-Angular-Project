@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Railway } from '../../services/railway.service';
@@ -12,7 +12,7 @@ import { StationModelResponse } from '../../types/station.model';
 })
 export class SearchComponent implements OnInit {
   searchForm: FormGroup;
-  cities: StationModelResponse[] = [];
+  cities = signal<StationModelResponse[]>([]);
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -30,7 +30,8 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.railwayService.getStations().subscribe((data) => {
-      this.cities = data;
+      this.cities.set(data);
+      console.log(data);
       this.cdr.detectChanges();
     });
   }

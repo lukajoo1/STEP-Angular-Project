@@ -34,24 +34,44 @@ export interface TrainSelectionModelResponse {
 }
 
 export interface SeatResponse {
-  id: number;
-  seatNumber: number;
-  isAvailable: boolean;
+  seatId: string;
+  number: string;
+  price: number;
+  isOccupied: boolean;
+  vagonId: number;
 }
 
 export interface CarriageResponse {
   id: number;
+  trainId: number;
+  trainNumber: number;
   name: string;
-  type: string;
   seats: SeatResponse[] | null;
 }
 
-export interface TrainResponse {
-  id: number;
-  trainNumber: string;
-  from: string;
-  to: string;
-  departureTime: string;
-  arrivalTime: string;
-  carriages: CarriageResponse[];
+export interface TicketRegisterRequest {
+  trainId: number;
+  date: string;
+  email: string;
+  phoneNumber: string;
+  people: peopleModelRequest[];
 }
+
+export interface peopleModelRequest {
+  seatId: string;
+  name: string;
+  surname: string;
+  idNumber: string;
+  status: string;
+  payoutCompleted: boolean;
+}
+
+// export interface TrainResponse {
+//   id: number;
+//   trainNumber: string;
+//   from: string;
+//   to: string;
+//   departureTime: string;
+//   arrivalTime: string;
+//   carriages: CarriageResponse[];
+// }

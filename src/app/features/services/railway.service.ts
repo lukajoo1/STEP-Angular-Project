@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StationModelResponse } from '../types/station.model';
-import { TrainSelectionModelResponse } from '../types/train-selection.model';
+import {
+  CarriageResponse,
+  SeatResponse,
+  TicketRegisterRequest,
+  TrainSelectionModelResponse,
+} from '../types/train-selection.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,11 +28,16 @@ export class Railway {
     );
   }
 
-  getTrainById(id: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/trains/${id}`);
+  getTrainById(id: string | number): Observable<TrainSelectionModelResponse> {
+    // <-- აქ შეცვალე
+    return this.http.get<TrainSelectionModelResponse>(`${this.apiUrl}/trains/${id}`);
   }
 
-  getVagonSeats(vagonId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/vagons/${vagonId}/seats`);
+  registerTicket(request: TicketRegisterRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tickets/register`, request, { responseType: 'text' });
+  }
+
+  getVagonSeats(vagonId: number): Observable<CarriageResponse[]> {
+    return this.http.get<CarriageResponse[]>(`${this.apiUrl}/getvagon/${vagonId}`);
   }
 }

@@ -7,7 +7,7 @@
           <label for="from">საიდან</label>
           <select id="from" formControlName="fromCity">
             <option value="" disabled selected>აირჩიეთ ქალაქი</option>
-            @for (city of cities; track city.id) {
+            @for (city of cities(); track city.id) {
               <option [value]="city.name">{{ city.name }}</option>
             } @empty {
               <option disabled>ქალაქები ვერ მოიძებნა</option>
@@ -19,7 +19,7 @@
           <label for="to">სად</label>
           <select id="to" formControlName="toCity">
             <option value="" disabled selected>აირჩიეთ ქალაქი</option>
-            @for (city of cities; track city.id) {
+            @for (city of cities(); track city.id) {
               <option [value]="city.name">{{ city.name }}</option>
             }
           </select>
