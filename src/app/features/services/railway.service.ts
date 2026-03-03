@@ -29,7 +29,6 @@ export class Railway {
   }
 
   getTrainById(id: string | number): Observable<TrainSelectionModelResponse> {
-    // <-- აქ შეცვალე
     return this.http.get<TrainSelectionModelResponse>(`${this.apiUrl}/trains/${id}`);
   }
 

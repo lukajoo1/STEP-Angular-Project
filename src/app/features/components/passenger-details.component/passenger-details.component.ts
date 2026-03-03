@@ -153,35 +153,23 @@ export class PassengerDetailsComponent implements OnInit {
         date: new Date().toISOString(),
         email: this.passengerForm.value.email,
         phoneNumber: this.passengerForm.value.phoneNumber,
-        people: this.people.value.map((p: any, index: number) => {
-          const seatId = this.selectedSeats()[index];
-          return {
-            seatId: seatId,
-            name: p.name,
-            surname: p.surname,
-            idNumber: p.idNumber,
-            status: p.status || 'Regular',
-            payoutCompleted: p.payoutCompleted ?? true,
-          };
-        }),
+        people: this.people.value.map((p: any, index: number) => ({
+          seatId: this.selectedSeats()[index],
+          name: p.name,
+          surname: p.surname,
+          idNumber: p.idNumber,
+          status: p.status || 'Regular',
+          payoutCompleted: p.payoutCompleted ?? true,
+        })),
       };
 
-      console.log('request:', JSON.stringify(request, null, 2));
-
-      this.railwayService.registerTicket(request).subscribe({
-        next: () => {
-          this.isBooked.set(true);
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.log('error full:', err);
-          alert('შეცდომა: ' + JSON.stringify(err.error));
+      this.router.navigate(['/payment'], {
+        state: {
+          payload: request,
+          totalPrice: this.totalPrice(),
         },
       });
     } else {
-      console.log('form valid:', this.passengerForm.valid);
-      console.log('form errors:', this.passengerForm.errors);
-      console.log('selected seats:', this.selectedSeats());
       this.passengerForm.markAllAsTouched();
     }
   }

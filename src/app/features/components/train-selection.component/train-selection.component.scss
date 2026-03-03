@@ -2,16 +2,16 @@
   max-width: 90rem;
   margin: 4rem auto;
   padding: 0 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   .results-header {
     margin-bottom: 2.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
     h3 {
-      color: #2c3e50;
-      font-size: 2.4rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 2rem;
+      font-weight: 600;
       margin: 0;
     }
   }
@@ -19,42 +19,53 @@
   .train-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.2rem;
   }
 
   .train-card {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 14px;
+    padding: 2rem 2.4rem;
     display: grid;
     grid-template-columns: 2fr 2fr 1fr;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     transition:
       transform 0.2s,
-      box-shadow 0.2s;
-    border: 1px solid #eee;
+      box-shadow 0.2s,
+      border-color 0.2s;
 
     &:hover {
-      transform: translateY(-0.3rem);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+      border-color: rgba(39, 174, 96, 0.25);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(39, 174, 96, 0.1) inset;
     }
 
     .train-info {
       .train-number {
         display: block;
-        font-size: 1.4rem;
-        color: #7f8c8d;
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.35);
         margin-bottom: 0.5rem;
-        font-weight: 600;
+        font-weight: 500;
+        letter-spacing: 0.05em;
       }
 
       .route {
         font-size: 1.8rem;
-        color: #2c3e50;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
 
         .arrow {
-          color: #3498db;
+          background: linear-gradient(90deg, #27ae60, #3498db);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           margin: 0 1rem;
           font-style: normal;
         }
@@ -72,33 +83,44 @@
         align-items: center;
 
         .label {
-          font-size: 1.2rem;
-          color: #95a5a6;
+          font-size: 1.1rem;
+          color: rgba(255, 255, 255, 0.35);
           text-transform: uppercase;
+          letter-spacing: 0.06em;
         }
 
         .time {
           font-size: 2rem;
-          font-weight: bold;
-          color: #2c3e50;
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.9);
         }
       }
     }
 
     .book-btn {
-      background-color: #27ae60;
-      color: white;
+      background: linear-gradient(135deg, #27ae60 0%, #3498db 100%);
+      color: #ffffff;
       border: none;
-      padding: 1.2rem 2rem;
+      padding: 1.1rem 2rem;
       border-radius: 8px;
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: 1.4rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.3s;
       justify-self: end;
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        filter 0.2s;
+      box-shadow: 0 4px 16px rgba(39, 174, 96, 0.25);
 
       &:hover {
-        background-color: #219150;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 24px rgba(52, 152, 219, 0.35);
+        filter: brightness(1.06);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
@@ -108,7 +130,8 @@
       gap: 1.5rem;
 
       .time-info {
-        margin: 1rem 0;
+        margin: 0.5rem 0;
+        justify-content: center;
       }
 
       .book-btn {
@@ -121,9 +144,11 @@
   .no-results {
     text-align: center;
     padding: 5rem;
-    background: #fff;
-    border-radius: 12px;
-    color: #7f8c8d;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: rgba(255, 255, 255, 0.35);
     font-size: 1.8rem;
   }
 }

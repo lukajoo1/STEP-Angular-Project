@@ -1,0 +1,153 @@
+.booking-container {
+  .payment-card {
+    max-width: 550px;
+    margin: 5rem auto;
+    background: white;
+    padding: 4rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  .payment-title {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .payment-summary {
+    background: #f1f2f6;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    margin-bottom: 2.5rem;
+
+    .summary-label {
+      margin: 0;
+      color: #7f8c8d;
+    }
+
+    .summary-amount {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #38ada9;
+    }
+  }
+
+  .card-form {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 1.2rem;
+      border: 2px solid #eee;
+      border-radius: 1rem;
+      box-sizing: border-box;
+      font-size: 1.4rem;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #38ada9;
+      }
+    }
+  }
+
+  .btn-pay {
+    margin-top: 2rem;
+    width: 100%;
+    height: 6rem;
+    background: #38ada9;
+    color: white;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+      filter 0.2s,
+      transform 0.2s;
+
+    &:hover:not(:disabled) {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .success-block {
+    text-align: center;
+    padding: 2rem;
+
+    .success-icon {
+      font-size: 6rem;
+      color: #38ada9;
+      margin-bottom: 2rem;
+    }
+
+    .success-title {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .success-subtitle {
+      color: #7f8c8d;
+      font-size: 1.6rem;
+      margin-bottom: 3rem;
+    }
+  }
+
+  .btn-download {
+    width: 100%;
+    margin-bottom: 1.2rem;
+    padding: 1.4rem;
+    background: linear-gradient(135deg, #27ae60, #3498db);
+    color: white;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+      filter 0.2s,
+      transform 0.2s;
+
+    &:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+  }
+
+  .btn-home {
+    width: 100%;
+    padding: 1.4rem;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(1.15);
+    }
+  }
+}
