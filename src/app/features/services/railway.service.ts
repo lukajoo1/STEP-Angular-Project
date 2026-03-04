@@ -32,11 +32,19 @@ export class Railway {
     return this.http.get<TrainSelectionModelResponse>(`${this.apiUrl}/trains/${id}`);
   }
 
+  getVagonSeats(vagonId: number): Observable<CarriageResponse[]> {
+    return this.http.get<CarriageResponse[]>(`${this.apiUrl}/getvagon/${vagonId}`);
+  }
+
   registerTicket(request: TicketRegisterRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/tickets/register`, request, { responseType: 'text' });
   }
 
-  getVagonSeats(vagonId: number): Observable<CarriageResponse[]> {
-    return this.http.get<CarriageResponse[]>(`${this.apiUrl}/getvagon/${vagonId}`);
+  checkTicketStatus(ticketId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/tickets/checkstatus/${ticketId}`);
+  }
+
+  cancelTicket(ticketId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/tickets/cancel/${ticketId}`);
   }
 }

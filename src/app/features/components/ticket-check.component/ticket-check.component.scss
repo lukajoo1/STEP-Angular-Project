@@ -1,0 +1,396 @@
+$primary: #38ada9;
+$primary-dark: #079992;
+$danger: #e74c3c;
+$danger-dark: #c0392b;
+$dark: #2c3e50;
+$gray-text: #4b6584;
+$light-bg: #f7f9fc;
+$white: #ffffff;
+
+.check-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 1rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  .search-section {
+    text-align: center;
+    margin-bottom: 3.5rem;
+
+    .main-title {
+      color: $dark;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 800;
+    }
+
+    .sub-title {
+      color: $gray-text;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 0.8rem;
+      max-width: 650px;
+      margin: 0 auto;
+      background: $white;
+      padding: 0.6rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+
+      .ticket-input {
+        flex: 1;
+        border: 2px solid transparent;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        border-radius: 0.8rem;
+        background: #f1f2f6;
+        color: $dark;
+
+        &:focus {
+          outline: none;
+          border-color: $primary;
+          background: $white;
+        }
+      }
+
+      .check-btn {
+        background: $primary;
+        color: $white;
+        border: none;
+        padding: 0 2.5rem;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: $primary-dark;
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+
+        &:disabled {
+          background: #a5b1c2;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+    }
+
+    .error-box {
+      margin-top: 1.5rem;
+      background: #fed33020;
+      color: #d35400;
+      padding: 1rem 2rem;
+      border-radius: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      border: 1px solid #fed330;
+    }
+  }
+
+  .ticket-card {
+    background: $white;
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+
+    .card-header {
+      background: $dark;
+      color: $white;
+      padding: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .train-meta {
+        .badge {
+          background: $primary;
+          color: $white;
+          padding: 0.4rem 1rem;
+          border-radius: 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        h2 {
+          font-size: 2.4rem;
+          margin: 0.8rem 0 0.3rem 0;
+          color: $white;
+        }
+        p {
+          color: #a5b1c2;
+          margin: 0;
+          font-size: 1.1rem;
+        }
+      }
+
+      .status-pill {
+        padding: 0.8rem 1.8rem;
+        border-radius: 5rem;
+        background: #fa8231;
+        color: $white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 15px rgba(250, 130, 49, 0.3);
+
+        &.confirmed {
+          background: #20bf6b;
+          box-shadow: 0 4px 15px rgba(32, 191, 107, 0.3);
+        }
+      }
+    }
+
+    .card-content {
+      padding: 3.5rem;
+
+      .route-viz {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4rem;
+
+        .stop {
+          text-align: center;
+          .city {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            color: $dark;
+          }
+          .time {
+            color: $primary-dark;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 0.3rem;
+            display: block;
+          }
+        }
+
+        .path {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 2.5rem;
+          position: relative;
+
+          .line {
+            height: 3px;
+            background: #d1d8e0;
+            width: 100%;
+            position: absolute;
+            border-radius: 2px;
+          }
+
+          .train-icon {
+            background: $white;
+            z-index: 1;
+            padding: 0 1.5rem;
+            font-size: 1.8rem;
+          }
+        }
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 2.5rem;
+        margin-bottom: 4rem;
+
+        .info-cell {
+          label {
+            color: $gray-text;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+          }
+          p {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: $dark;
+          }
+          .price-val {
+            color: $primary-dark;
+            font-size: 1.8rem;
+          }
+        }
+      }
+
+      .passengers-section {
+        background: $light-bg;
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+
+        h3 {
+          margin-top: 0;
+          font-size: 1.4rem;
+          margin-bottom: 2rem;
+          color: $dark;
+          border-left: 5px solid $primary;
+          padding-left: 1rem;
+        }
+
+        .passengers-list {
+          display: grid;
+          gap: 1.2rem;
+
+          .p-row {
+            background: $white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e1e8ef;
+
+            .p-details {
+              display: flex;
+              flex-direction: column;
+              strong {
+                font-size: 1.2rem;
+                color: $dark;
+                margin-bottom: 0.2rem;
+              }
+              span {
+                font-size: 0.95rem;
+                color: $gray-text;
+                font-weight: 500;
+              }
+            }
+
+            .p-seat {
+              text-align: right;
+              background: #f1f2f6;
+              padding: 0.6rem 1.2rem;
+              border-radius: 0.8rem;
+
+              .s-label {
+                display: block;
+                font-size: 0.7rem;
+                color: $gray-text;
+                text-transform: uppercase;
+                font-weight: 700;
+              }
+              .s-num {
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: $dark;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .card-footer {
+      padding: 2.5rem 3.5rem;
+      background: #f8f9fa;
+      border-top: 1px solid #e1e8ef;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .cancel-ticket-btn {
+        background: $white;
+        color: $danger;
+        border: 2px solid $danger;
+        padding: 1.2rem 3.5rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:hover {
+          background: $danger;
+          color: $white;
+          transform: scale(1.05);
+          box-shadow: 0 10px 20px rgba($danger, 0.2);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          border-color: #ccc;
+          color: #999;
+          &:hover {
+            transform: none;
+            background: $white;
+            box-shadow: none;
+          }
+        }
+      }
+
+      .disclaimer {
+        font-size: 0.9rem;
+        color: $gray-text;
+        margin-top: 1.5rem;
+        font-style: italic;
+      }
+    }
+  }
+}
+
+.animate-fade-in {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// მობილური ვერსია
+@media (max-width: 600px) {
+  .check-container {
+    padding: 0.5rem;
+    .search-section .main-title {
+      font-size: 2rem;
+    }
+    .search-bar {
+      flex-direction: column;
+      background: transparent;
+      box-shadow: none;
+      .check-btn {
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+    }
+    .ticket-card {
+      .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+      .card-content {
+        padding: 1.5rem;
+        .route-viz {
+          flex-direction: column;
+          gap: 1.5rem;
+          .path {
+            transform: rotate(90deg);
+            margin: 2rem 0;
+          }
+        }
+      }
+    }
+  }
+}

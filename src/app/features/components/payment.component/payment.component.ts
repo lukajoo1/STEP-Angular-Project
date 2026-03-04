@@ -21,6 +21,7 @@ export class PaymentComponent {
 
   isProcessing = false;
   isSuccess = false;
+  registeredTicketId: string = ''; // აქ შეინახება UUID
 
   constructor() {
     if (!window.history.state?.payload) {
@@ -40,17 +41,41 @@ export class PaymentComponent {
     this.isProcessing = true;
 
     this.railwayService.registerTicket(request).subscribe({
-      next: () => {
-        this.isProcessing = false;
-        this.isSuccess = true;
-        this.cdr.detectChanges();
+      next: (response: any) => {
+        this.handleSuccess(response);
       },
       error: (err) => {
-        this.isProcessing = false;
-        alert('შეცდომა: ' + (err.error?.title || 'ვერ მოხერხდა დაჯავშნა'));
-        this.cdr.detectChanges();
+        // ხშირად სერვერი 400-ს აბრუნებს, მაგრამ ტექსტში მაინც არის ბილეთის ნომერი
+        const errorText = err.error?.text || err.error || '';
+        if (typeof errorText === 'string' && errorText.includes('ბილეთის ნომერია')) {
+          this.handleSuccess(errorText);
+        } else {
+          this.isProcessing = false;
+          alert('შეცდომა: ' + (err.error?.title || 'ვერ მოხერხდა დაჯავშნა'));
+          this.cdr.detectChanges();
+        }
       },
     });
+  }
+
+  // დამხმარე ფუნქცია წარმატებული პასუხის დასამუშავებლად
+  private handleSuccess(response: any) {
+    this.isProcessing = false;
+    this.isSuccess = true;
+
+    // UUID-ის ამოჭრა ტექსტიდან (ეძებს 36 სიმბოლიან სტანდარტულ ფორმატს)
+    const idMatch = typeof response === 'string' ? response.match(/[0-9a-fA-F-]{36}/) : null;
+
+    this.registeredTicketId = idMatch ? idMatch[0] : '';
+    this.cdr.detectChanges();
+  }
+
+  // ID-ის კოპირების ფუნქცია
+  copyTicketId() {
+    if (this.registeredTicketId) {
+      navigator.clipboard.writeText(this.registeredTicketId);
+      alert('ბილეთის ID დაკოპირებულია!');
+    }
   }
 
   downloadTicket() {
@@ -66,24 +91,29 @@ export class PaymentComponent {
     doc.setFont('helvetica', 'bold');
     doc.text('TRAIN TICKET', pageWidth / 2, 25, { align: 'center' });
 
+    // PDF-ში Ticket ID-ის ჩამატება სათაურის ქვემოთ
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`TICKET ID: ${this.registeredTicketId}`, pageWidth / 2, 32, { align: 'center' });
+
     doc.setDrawColor(39, 174, 96);
     doc.setLineWidth(0.8);
-    doc.line(20, 30, pageWidth - 20, 30);
+    doc.line(20, 35, pageWidth - 20, 35);
 
     doc.setFontSize(11);
     doc.setTextColor(160, 200, 160);
     doc.setFont('helvetica', 'normal');
-    doc.text('Email:', 20, 42);
-    doc.text('Phone:', 20, 50);
+    doc.text('Email:', 20, 45);
+    doc.text('Phone:', 20, 53);
     doc.setTextColor(255, 255, 255);
-    doc.text(req.email || '-', 55, 42);
-    doc.text(req.phoneNumber || '-', 55, 50);
+    doc.text(req.email || '-', 55, 45);
+    doc.text(req.phoneNumber || '-', 55, 53);
 
     doc.setDrawColor(60, 80, 100);
     doc.setLineWidth(0.3);
-    doc.line(20, 56, pageWidth - 20, 56);
+    doc.line(20, 58, pageWidth - 20, 58);
 
-    let y = 65;
+    let y = 67;
     req.people?.forEach((person: any, index: number) => {
       doc.setFillColor(25, 55, 90);
       doc.roundedRect(18, y - 6, pageWidth - 36, 38, 3, 3, 'F');
@@ -127,7 +157,7 @@ export class PaymentComponent {
     doc.setFont('helvetica', 'normal');
     doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, 285, { align: 'center' });
 
-    doc.save(`ticket-${req.email}.pdf`);
+    doc.save(`ticket-${this.registeredTicketId.substring(0, 8)}.pdf`);
   }
 
   goHome() {

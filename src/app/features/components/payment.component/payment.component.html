@@ -40,10 +40,62 @@
       <div class="success-block">
         <div class="success-icon">✔</div>
         <h2 class="success-title">გადახდა წარმატებულია!</h2>
+
+        <div class="ticket-id-section" *ngIf="registeredTicketId">
+          <p class="id-label">ბილეთის უნიკალური ID (შეინახეთ საძიებოდ):</p>
+          <div class="id-wrapper">
+            <code class="id-value">{{ registeredTicketId }}</code>
+            <button class="btn-copy" (click)="copyTicketId()" title="კოპირება">📋</button>
+          </div>
+        </div>
+
         <p class="success-subtitle">ბილეთები გამოგზავნილია თქვენს მეილზე.</p>
 
-        <button class="btn-download" (click)="downloadTicket()">🎫 ბილეთის PDF გადმოწერა</button>
+        <div class="ticket-details">
+          <div class="ticket-header">
+            <span class="ticket-label">🚂 ბილეთის დეტალები</span>
+            <span class="ticket-total">{{ totalPrice }} ₾</span>
+          </div>
 
+          <div class="ticket-meta">
+            <div class="meta-row">
+              <span class="meta-key">მეილი:</span>
+              <span class="meta-val">{{ request?.email || '-' }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">ტელეფონი:</span>
+              <span class="meta-val">{{ request?.phoneNumber || '-' }}</span>
+            </div>
+          </div>
+
+          <div class="passengers">
+            @for (person of request?.people; track $index) {
+              <div class="passenger-card">
+                <div class="passenger-index">მგზავრი {{ $index + 1 }}</div>
+                <div class="passenger-grid">
+                  <div class="p-row">
+                    <span class="p-key">სახელი:</span>
+                    <span class="p-val">{{ person.name }} {{ person.surname }}</span>
+                  </div>
+                  <div class="p-row">
+                    <span class="p-key">ID:</span>
+                    <span class="p-val">{{ person.idNumber || '-' }}</span>
+                  </div>
+                  <div class="p-row">
+                    <span class="p-key">ადგილი:</span>
+                    <span class="p-val">{{ person.seatId || '-' }}</span>
+                  </div>
+                  <div class="p-row">
+                    <span class="p-key">სტატუსი:</span>
+                    <span class="p-val">{{ person.status || 'ჩვეულებრივი' }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <button class="btn-download" (click)="downloadTicket()">🎫 ბილეთის PDF გადმოწერა</button>
         <button class="btn-home" (click)="goHome()">მთავარზე დაბრუნება</button>
       </div>
     }

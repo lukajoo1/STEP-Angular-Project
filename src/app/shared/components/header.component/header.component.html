@@ -1,6 +1,12 @@
 <header>
   <h1><a routerLink="home">Railway</a></h1>
   <nav>
-    <a class="ticket-check">ბილეთის შემოწმება/დაბრუნება</a>
+    <a
+      class="ticket-check"
+      routerLink="check-ticket"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >ბილეთის შემოწმება/დაბრუნება</a
+    >
   </nav>
 </header>

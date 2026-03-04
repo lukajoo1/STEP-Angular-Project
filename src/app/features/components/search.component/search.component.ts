@@ -31,7 +31,6 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.railwayService.getStations().subscribe((data) => {
       this.cities.set(data);
-      console.log(data);
       this.cdr.detectChanges();
     });
   }

@@ -3,6 +3,7 @@ import { SearchComponent } from './features/components/search.component/search.c
 import { TrainSelectionComponent } from './features/components/train-selection.component/train-selection.component';
 import { PassengerDetailsComponent } from './features/components/passenger-details.component/passenger-details.component';
 import { PaymentComponent } from './features/components/payment.component/payment.component';
+import { TicketCheckComponent } from './features/components/ticket-check.component/ticket-check.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -10,4 +11,5 @@ export const routes: Routes = [
   { path: 'trains', component: TrainSelectionComponent },
   { path: 'passengers', component: PassengerDetailsComponent },
   { path: 'payment', component: PaymentComponent },
+  { path: 'check-ticket', component: TicketCheckComponent },
 ];
