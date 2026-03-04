@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Railway } from '../../services/railway.service';
 import { StationModelResponse } from '../../types/station.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search.component',
@@ -18,6 +19,7 @@ export class SearchComponent implements OnInit {
   private router = inject(Router);
   private railwayService = inject(Railway);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
     this.searchForm = this.fb.group({
@@ -29,10 +31,13 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.railwayService.getStations().subscribe((data) => {
-      this.cities.set(data);
-      this.cdr.detectChanges();
-    });
+    this.railwayService
+      .getStations()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.cities.set(data);
+        this.cdr.detectChanges();
+      });
   }
 
   onSearch() {

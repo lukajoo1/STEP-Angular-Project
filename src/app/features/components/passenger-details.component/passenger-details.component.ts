@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, inject, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Railway } from '../../services/railway.service';
 import { TicketRegisterRequest } from '../../types/train-selection.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-passenger-details',
@@ -27,6 +28,7 @@ export class PassengerDetailsComponent implements OnInit {
   private railwayService = inject(Railway);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
     this.passengerForm = this.fb.group({
@@ -41,7 +43,7 @@ export class PassengerDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const trainId = params['trainId'];
       const count = params['passengers'] || params['ticketCount'];
       this.maxPassengers.set(count ? +count : 1);
@@ -55,17 +57,20 @@ export class PassengerDetailsComponent implements OnInit {
   }
 
   loadTrainDetails(id: string) {
-    this.railwayService.getTrainById(id).subscribe({
-      next: (data: any) => {
-        this.train.set(data);
-        const vagonsList = data.vagons || data.carriages || [];
-        if (vagonsList.length > 0) {
-          this.selectVagon(vagonsList[0]);
-        }
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error loading train:', err),
-    });
+    this.railwayService
+      .getTrainById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data: any) => {
+          this.train.set(data);
+          const vagonsList = data.vagons || data.carriages || [];
+          if (vagonsList.length > 0) {
+            this.selectVagon(vagonsList[0]);
+          }
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error loading train:', err),
+      });
   }
 
   selectVagon(vagon: any) {
@@ -73,30 +78,33 @@ export class PassengerDetailsComponent implements OnInit {
     this.totalPrice.set(0);
     this.syncPeopleForm(0);
 
-    this.railwayService.getVagonSeats(vagon.id).subscribe({
-      next: (carriage: any) => {
-        const vagonData = Array.isArray(carriage) ? carriage[0] : carriage;
-        const realSeats = vagonData?.seats || [];
+    this.railwayService
+      .getVagonSeats(vagon.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (carriage: any) => {
+          const vagonData = Array.isArray(carriage) ? carriage[0] : carriage;
+          const realSeats = vagonData?.seats || [];
 
-        const seats = realSeats
-          .map((s: any) => ({
-            ...s,
-            isAvailable: !s.isOccupied,
-          }))
-          .sort((a: any, b: any) => {
-            const numA = parseInt(a.number);
-            const numB = parseInt(b.number);
-            const letterA = a.number.replace(/[0-9]/g, '');
-            const letterB = b.number.replace(/[0-9]/g, '');
+          const seats = realSeats
+            .map((s: any) => ({
+              ...s,
+              isAvailable: !s.isOccupied,
+            }))
+            .sort((a: any, b: any) => {
+              const numA = parseInt(a.number);
+              const numB = parseInt(b.number);
+              const letterA = a.number.replace(/[0-9]/g, '');
+              const letterB = b.number.replace(/[0-9]/g, '');
 
-            if (numA !== numB) return numA - numB;
-            return letterA.localeCompare(letterB);
-          });
+              if (numA !== numB) return numA - numB;
+              return letterA.localeCompare(letterB);
+            });
 
-        this.selectedVagon.set({ ...vagonData, seats });
-        this.cdr.detectChanges();
-      },
-    });
+          this.selectedVagon.set({ ...vagonData, seats });
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   onSeatClick(seat: any): void {

@@ -8,29 +8,15 @@ export interface TrainSelectionModelResponse {
   departure: string;
   arrive: string;
   departureId: number;
-  vagons: [
-    {
-      id: number;
-      trainId: number;
-      trainNumber: number;
-      name: string;
-      seats: null;
-    },
-    {
-      id: number;
-      trainId: number;
-      trainNumber: number;
-      name: string;
-      seats: null;
-    },
-    {
-      id: number;
-      trainId: number;
-      trainNumber: number;
-      name: string;
-      seats: null;
-    },
-  ];
+  vagons: VagonResponse[];
+}
+
+export interface VagonResponse {
+  id: number;
+  trainId: number;
+  trainNumber: number;
+  name: string;
+  seats: null;
 }
 
 export interface SeatResponse {

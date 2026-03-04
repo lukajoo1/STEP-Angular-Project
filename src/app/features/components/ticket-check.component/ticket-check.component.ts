@@ -1,7 +1,8 @@
-import { Component, signal, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, signal, inject, ChangeDetectorRef, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Railway } from '../../services/railway.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ticket-check',
@@ -18,6 +19,7 @@ export class TicketCheckComponent {
 
   private railwayService = inject(Railway);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   checkTicket() {
     const id = this.ticketId().trim();
@@ -27,19 +29,22 @@ export class TicketCheckComponent {
     this.error.set(null);
     this.ticketData.set(null);
 
-    this.railwayService.checkTicketStatus(id).subscribe({
-      next: (data) => {
-        console.log('Server Data:', data);
-        this.ticketData.set(data);
-        this.isLoading.set(false);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.error.set('ბილეთი ვერ მოიძებნა');
-        this.isLoading.set(false);
-        console.log(err);
-      },
-    });
+    this.railwayService
+      .checkTicketStatus(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          console.log('Server Data:', data);
+          this.ticketData.set(data);
+          this.isLoading.set(false);
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.error.set('ბილეთი ვერ მოიძებნა');
+          this.isLoading.set(false);
+          console.log(err);
+        },
+      });
   }
 
   cancelTicket() {
@@ -47,23 +52,26 @@ export class TicketCheckComponent {
     if (!id || !confirm('ნამდვილად გსურთ ბილეთის გაუქმება?')) return;
 
     this.isLoading.set(true);
-    this.railwayService.cancelTicket(id).subscribe({
-      next: () => {
-        alert('ბილეთი წარმატებით გაუქმდა');
-        this.ticketData.set(null);
-        this.ticketId.set('');
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        if (err.status === 200 || err.status === 204) {
+    this.railwayService
+      .cancelTicket(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
           alert('ბილეთი წარმატებით გაუქმდა');
           this.ticketData.set(null);
           this.ticketId.set('');
-        } else {
-          alert('ბილეთის გაუქმება ვერ მოხერხდა');
-        }
-        this.isLoading.set(false);
-      },
-    });
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          if (err.status === 200 || err.status === 204) {
+            alert('ბილეთი წარმატებით გაუქმდა');
+            this.ticketData.set(null);
+            this.ticketId.set('');
+          } else {
+            alert('ბილეთის გაუქმება ვერ მოხერხდა');
+          }
+          this.isLoading.set(false);
+        },
+      });
   }
 }

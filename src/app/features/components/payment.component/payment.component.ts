@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Railway } from '../../services/railway.service';
 import jsPDF from 'jspdf';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-payment',
@@ -15,13 +16,14 @@ export class PaymentComponent {
   private router = inject(Router);
   private railwayService = inject(Railway);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   totalPrice = window.history.state?.totalPrice;
   request = window.history.state?.payload;
 
   isProcessing = false;
   isSuccess = false;
-  registeredTicketId: string = ''; // აქ შეინახება UUID
+  registeredTicketId: string = '';
 
   constructor() {
     if (!window.history.state?.payload) {
@@ -40,37 +42,36 @@ export class PaymentComponent {
 
     this.isProcessing = true;
 
-    this.railwayService.registerTicket(request).subscribe({
-      next: (response: any) => {
-        this.handleSuccess(response);
-      },
-      error: (err) => {
-        // ხშირად სერვერი 400-ს აბრუნებს, მაგრამ ტექსტში მაინც არის ბილეთის ნომერი
-        const errorText = err.error?.text || err.error || '';
-        if (typeof errorText === 'string' && errorText.includes('ბილეთის ნომერია')) {
-          this.handleSuccess(errorText);
-        } else {
-          this.isProcessing = false;
-          alert('შეცდომა: ' + (err.error?.title || 'ვერ მოხერხდა დაჯავშნა'));
-          this.cdr.detectChanges();
-        }
-      },
-    });
+    this.railwayService
+      .registerTicket(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.handleSuccess(response);
+        },
+        error: (err) => {
+          const errorText = err.error?.text || err.error || '';
+          if (typeof errorText === 'string' && errorText.includes('ბილეთის ნომერია')) {
+            this.handleSuccess(errorText);
+          } else {
+            this.isProcessing = false;
+            alert('შეცდომა: ' + (err.error?.title || 'ვერ მოხერხდა დაჯავშნა'));
+            this.cdr.detectChanges();
+          }
+        },
+      });
   }
 
-  // დამხმარე ფუნქცია წარმატებული პასუხის დასამუშავებლად
   private handleSuccess(response: any) {
     this.isProcessing = false;
     this.isSuccess = true;
 
-    // UUID-ის ამოჭრა ტექსტიდან (ეძებს 36 სიმბოლიან სტანდარტულ ფორმატს)
     const idMatch = typeof response === 'string' ? response.match(/[0-9a-fA-F-]{36}/) : null;
 
     this.registeredTicketId = idMatch ? idMatch[0] : '';
     this.cdr.detectChanges();
   }
 
-  // ID-ის კოპირების ფუნქცია
   copyTicketId() {
     if (this.registeredTicketId) {
       navigator.clipboard.writeText(this.registeredTicketId);
@@ -91,7 +92,6 @@ export class PaymentComponent {
     doc.setFont('helvetica', 'bold');
     doc.text('TRAIN TICKET', pageWidth / 2, 25, { align: 'center' });
 
-    // PDF-ში Ticket ID-ის ჩამატება სათაურის ქვემოთ
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
     doc.text(`TICKET ID: ${this.registeredTicketId}`, pageWidth / 2, 32, { align: 'center' });
@@ -134,10 +134,11 @@ export class PaymentComponent {
       doc.text(person.idNumber || '-', 50, y + 20);
 
       doc.text(`Seat ID:`, pageWidth / 2 + 5, y + 12);
-      doc.text(String(person.seatId || '-'), pageWidth / 2 + 30, y + 12);
 
-      doc.text(`Status:`, pageWidth / 2 + 5, y + 20);
-      doc.text(person.status || 'Regular', pageWidth / 2 + 30, y + 20);
+      doc.text(String(person.seatId || '-'), pageWidth / 2 + 30, y + 12, { maxWidth: 35 });
+
+      doc.text(`Status:`, pageWidth / 2 + 5, y + 24);
+      doc.text(person.status || 'Regular', pageWidth / 2 + 30, y + 24);
 
       y += 46;
     });
@@ -150,6 +151,7 @@ export class PaymentComponent {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(39, 174, 96);
+
     doc.text(`Total: ${this.totalPrice} GEL`, pageWidth - 20, y, { align: 'right' });
 
     doc.setFontSize(9);
