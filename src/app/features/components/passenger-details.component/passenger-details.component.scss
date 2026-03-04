@@ -516,3 +516,15 @@
     transform: translateY(0);
   }
 }
+
+@media (max-width: 480px) {
+  .summary-content {
+    flex-wrap: wrap;
+    justify-content: center !important;
+    gap: 1rem;
+  }
+
+  .train-main {
+    text-align: center;
+  }
+}
