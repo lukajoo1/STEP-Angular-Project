@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Railway } from '../../services/railway.service';
 import jsPDF from 'jspdf';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TicketRegisterResponse } from '../../types/train-selection.model';
 
 @Component({
   selector: 'app-payment',
@@ -46,7 +47,7 @@ export class PaymentComponent {
       .registerTicket(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: any) => {
+        next: (response: TicketRegisterResponse) => {
           this.handleSuccess(response);
         },
         error: (err) => {

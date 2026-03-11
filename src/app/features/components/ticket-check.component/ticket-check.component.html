@@ -26,12 +26,12 @@
       <div class="card-header">
         <div class="train-meta">
           <span class="badge">მატარებელი</span>
-          <h2>№{{ ticketData().train.number }}</h2>
-          <p>{{ ticketData().train.name }}</p>
+          <h2>№{{ ticketData()!.train.number }}</h2>
+          <p>{{ ticketData()!.train.name }}</p>
         </div>
         <div class="status-wrap">
-          <span class="status-pill" [class.confirmed]="ticketData().confirmed">
-            {{ ticketData().confirmed ? 'დადასტურებული' : 'მუშავდება' }}
+          <span class="status-pill" [class.confirmed]="ticketData()?.confirmed">
+            {{ ticketData()?.confirmed ? 'დადასტურებული' : 'მუშავდება' }}
           </span>
         </div>
       </div>
@@ -39,42 +39,42 @@
       <div class="card-content">
         <div class="route-viz">
           <div class="stop">
-            <span class="city">{{ ticketData().train.from }}</span>
-            <span class="time">{{ ticketData().train.departure }}</span>
+            <span class="city">{{ ticketData()!.train.from }}</span>
+            <span class="time">{{ ticketData()!.train.departure }}</span>
           </div>
           <div class="path">
             <span class="line"></span>
             <span class="train-icon">🚂</span>
           </div>
           <div class="stop">
-            <span class="city">{{ ticketData().train.to }}</span>
-            <span class="time">{{ ticketData().train.arrive }}</span>
+            <span class="city">{{ ticketData()!.train.to }}</span>
+            <span class="time">{{ ticketData()!.train.arrive }}</span>
           </div>
         </div>
 
         <div class="info-grid">
           <div class="info-cell">
             <label>საკონტაქტო მეილი</label>
-            <p>{{ ticketData().email }}</p>
+            <p>{{ ticketData()?.email }}</p>
           </div>
           <div class="info-cell">
             <label>ტელეფონი</label>
-            <p>{{ ticketData().phone }}</p>
+            <p>{{ ticketData()?.phone }}</p>
           </div>
           <div class="info-cell">
             <label>ყიდვის თარიღი</label>
-            <p>{{ ticketData().date }}</p>
+            <p>{{ ticketData()?.date }}</p>
           </div>
           <div class="info-cell">
             <label>ჯამური ფასი</label>
-            <p class="price-val">{{ ticketData().ticketPrice }} ₾</p>
+            <p class="price-val">{{ ticketData()?.ticketPrice }} ₾</p>
           </div>
         </div>
 
         <div class="passengers-section">
           <h3>მგზავრების სია</h3>
           <div class="passengers-list">
-            @for (person of ticketData().persons; track person.id) {
+            @for (person of ticketData()?.persons; track person.id) {
               <div class="p-row">
                 <div class="p-details">
                   <strong>{{ person.name }} {{ person.surname }}</strong>

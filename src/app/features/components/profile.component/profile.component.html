@@ -1,0 +1,29 @@
+<section class="profile">
+  <h2>Profile</h2>
+
+  @if (user(); as u) {
+    <div class="card">
+      <div class="top">
+        <img class="avatar" [src]="u.avatar" alt="avatar" />
+        <div>
+          <div class="name">{{ u.firstName }} {{ u.lastName }}</div>
+          <div class="email">{{ u.email }}</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div><span>Age</span><strong>{{ u.age }}</strong></div>
+        <div><span>Gender</span><strong>{{ u.gender }}</strong></div>
+        <div><span>Phone</span><strong>{{ u.phone }}</strong></div>
+        <div><span>Zip code</span><strong>{{ u.zipcode }}</strong></div>
+        <div class="wide"><span>Address</span><strong>{{ u.address }}</strong></div>
+        <div><span>Verified</span><strong>{{ u.verified ? 'Yes' : 'No' }}</strong></div>
+        <div><span>Role</span><strong>{{ u.role }}</strong></div>
+      </div>
+    </div>
+  } @else {
+    <p class="hint">No user data loaded yet.</p>
+    <a routerLink="/home">Go home</a>
+  }
+</section>
+

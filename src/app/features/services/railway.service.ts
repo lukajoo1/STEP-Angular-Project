@@ -6,6 +6,7 @@ import {
   CarriageResponse,
   SeatResponse,
   TicketRegisterRequest,
+  TicketRegisterResponse,
   TrainSelectionModelResponse,
 } from '../types/train-selection.model';
 
@@ -36,15 +37,15 @@ export class Railway {
     return this.http.get<CarriageResponse[]>(`${this.apiUrl}/getvagon/${vagonId}`);
   }
 
-  registerTicket(request: TicketRegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/tickets/register`, request, { responseType: 'text' });
+  registerTicket(request: TicketRegisterRequest): Observable<TicketRegisterResponse> {
+    return this.http.post<TicketRegisterResponse>(`${this.apiUrl}/tickets/register`, request);
   }
 
-  checkTicketStatus(ticketId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/tickets/checkstatus/${ticketId}`);
+  checkTicketStatus(ticketId: string): Observable<TicketRegisterResponse> {
+    return this.http.get<TicketRegisterResponse>(`${this.apiUrl}/tickets/checkstatus/${ticketId}`);
   }
 
-  cancelTicket(ticketId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/tickets/cancel/${ticketId}`);
+  cancelTicket(ticketId: string): Observable<SeatResponse> {
+    return this.http.delete<SeatResponse>(`${this.apiUrl}/tickets/cancel/${ticketId}`);
   }
 }

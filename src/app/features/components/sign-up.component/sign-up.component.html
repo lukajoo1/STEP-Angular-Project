@@ -1,0 +1,79 @@
+<section class="auth">
+  <h2>Sign up</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid">
+      <label>
+        <span>First name</span>
+        <input type="text" formControlName="firstName" />
+      </label>
+
+      <label>
+        <span>Last name</span>
+        <input type="text" formControlName="lastName" />
+      </label>
+    </div>
+
+    <div class="grid">
+      <label>
+        <span>Age</span>
+        <input type="number" formControlName="age" />
+      </label>
+
+      <label>
+        <span>Gender</span>
+        <select formControlName="gender">
+          @for (g of genders; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" placeholder="john@doe.com" />
+    </label>
+
+    <label>
+      <span>Password</span>
+      <input type="password" formControlName="password" placeholder="••••••••" />
+    </label>
+
+    <label>
+      <span>Address</span>
+      <input type="text" formControlName="address" />
+    </label>
+
+    <div class="grid">
+      <label>
+        <span>Phone</span>
+        <input type="text" formControlName="phone" placeholder="+995599123456" />
+      </label>
+
+      <label>
+        <span>Zip code</span>
+        <input type="text" formControlName="zipcode" placeholder="0178" />
+      </label>
+    </div>
+
+    <label>
+      <span>Avatar URL</span>
+      <input type="text" formControlName="avatar" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="isLoading() || form.invalid">
+      {{ isLoading() ? 'Creating…' : 'Create account' }}
+    </button>
+  </form>
+
+  <p class="hint">
+    Already have an account?
+    <a routerLink="/signin">Sign in</a>
+  </p>
+</section>
+

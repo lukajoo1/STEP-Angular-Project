@@ -1,0 +1,29 @@
+<section class="auth">
+  <h2>Sign in</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" placeholder="john@doe.com" />
+    </label>
+
+    <label>
+      <span>Password</span>
+      <input type="password" formControlName="password" placeholder="••••••••" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="isLoading() || form.invalid">
+      {{ isLoading() ? 'Signing in…' : 'Sign in' }}
+    </button>
+  </form>
+
+  <p class="hint">
+    Don’t have an account?
+    <a routerLink="/signup">Sign up</a>
+  </p>
+</section>
+

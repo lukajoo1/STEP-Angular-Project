@@ -8,5 +8,50 @@
       [routerLinkActiveOptions]="{ exact: true }"
       >ბილეთის შემოწმება/დაბრუნება</a
     >
+    @if (!isAuthenticated()) {
+      <a routerLink="signin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+        >Sign in</a
+      >
+      <a routerLink="signup" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+        >Sign up</a
+      >
+    } @else {
+      <div class="profile" (click)="$event.stopPropagation()">
+        <button type="button" class="profile-btn" (click)="toggleMenu()">
+          @if (user()?.avatar) {
+            <img class="avatar" [src]="user()?.avatar" alt="avatar" />
+          } @else {
+            <span class="avatar fallback">U</span>
+          }
+        </button>
+
+        @if (menuOpen()) {
+          <div class="menu">
+            <div class="menu-head">
+              @if (user(); as u) {
+                <div class="name">{{ u.firstName }} {{ u.lastName }}</div>
+                <div class="email">{{ u.email }}</div>
+              } @else {
+                <div class="name">Signed in</div>
+                <div class="email">{{ email() }}</div>
+              }
+            </div>
+            @if (needsVerification()) {
+              <div class="menu-note">
+                Email is not verified yet. Click below to send verification email.
+              </div>
+              <button type="button" class="menu-item" (click)="sendVerificationEmail()">
+                Send verification email
+              </button>
+              @if (verifyStatus()) {
+                <div class="menu-note">{{ verifyStatus() }}</div>
+              }
+            }
+            <a class="menu-item" routerLink="/profile" (click)="closeMenu()">Profile</a>
+            <button type="button" class="menu-item danger" (click)="logout()">Sign out</button>
+          </div>
+        }
+      </div>
+    }
   </nav>
 </header>

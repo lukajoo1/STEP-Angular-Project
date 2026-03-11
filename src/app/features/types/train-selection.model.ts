@@ -8,7 +8,7 @@ export interface TrainSelectionModelResponse {
   departure: string;
   arrive: string;
   departureId: number;
-  vagons: VagonResponse[];
+  vagons: CarriageResponse[];
 }
 
 export interface VagonResponse {
@@ -43,6 +43,29 @@ export interface TicketRegisterRequest {
   people: peopleModelRequest[];
 }
 
+export interface TicketRegisterResponse {
+  id: string;
+  phone: string;
+  email: string;
+  date: string;
+  ticketPrice: 0;
+  trainID: 0;
+  confirmed: boolean;
+  train: TrainSelectionModelResponse;
+  persons: PersonModelResponse[];
+}
+
+export interface PersonModelResponse {
+  id: 0;
+  ticketId: string;
+  seat: SeatResponse;
+  name: string;
+  surname: string;
+  idNumber: string;
+  status: string;
+  payoutCompleted: boolean;
+}
+
 export interface peopleModelRequest {
   seatId: string;
   name: string;
@@ -51,13 +74,3 @@ export interface peopleModelRequest {
   status: string;
   payoutCompleted: boolean;
 }
-
-// export interface TrainResponse {
-//   id: number;
-//   trainNumber: string;
-//   from: string;
-//   to: string;
-//   departureTime: string;
-//   arrivalTime: string;
-//   carriages: CarriageResponse[];
-// }

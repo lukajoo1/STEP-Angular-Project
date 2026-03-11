@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Railway } from '../../services/railway.service';
-import { TicketRegisterRequest } from '../../types/train-selection.model';
+import {
+  TicketRegisterRequest,
+  TrainSelectionModelResponse,
+} from '../../types/train-selection.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -14,7 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./passenger-details.component.scss'],
 })
 export class PassengerDetailsComponent implements OnInit {
-  train = signal<any>(null);
+  train = signal<TrainSelectionModelResponse | null>(null);
   selectedVagon = signal<any>(null);
   selectedSeats = signal<string[]>([]);
   maxPassengers = signal<number>(1);
@@ -61,9 +64,9 @@ export class PassengerDetailsComponent implements OnInit {
       .getTrainById(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data: any) => {
+        next: (data: TrainSelectionModelResponse) => {
           this.train.set(data);
-          const vagonsList = data.vagons || data.carriages || [];
+          const vagonsList = data.vagons || [];
           if (vagonsList.length > 0) {
             this.selectVagon(vagonsList[0]);
           }
@@ -157,7 +160,7 @@ export class PassengerDetailsComponent implements OnInit {
   confirmBooking() {
     if (this.passengerForm.valid && this.selectedSeats().length > 0) {
       const request: TicketRegisterRequest = {
-        trainId: Number(this.train().id),
+        trainId: Number(this.train()?.id),
         date: new Date().toISOString(),
         email: this.passengerForm.value.email,
         phoneNumber: this.passengerForm.value.phoneNumber,

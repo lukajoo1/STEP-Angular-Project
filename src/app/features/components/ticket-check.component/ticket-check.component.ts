@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Railway } from '../../services/railway.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TicketRegisterResponse } from '../../types/train-selection.model';
 
 @Component({
   selector: 'app-ticket-check',
@@ -13,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class TicketCheckComponent {
   ticketId = signal<string>('');
-  ticketData = signal<any>(null);
+  ticketData = signal<TicketRegisterResponse | null>(null);
   isLoading = signal<boolean>(false);
   error = signal<string | null>(null);
 

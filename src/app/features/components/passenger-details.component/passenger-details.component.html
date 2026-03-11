@@ -3,21 +3,21 @@
     <header class="train-summary-card">
       <div class="summary-content">
         <div class="train-main">
-          <h2>რეისი №{{ train().number }}</h2>
+          <h2>რეისი №{{ train()?.number }}</h2>
           <div class="route-display">
-            <span class="city">{{ train().from }}</span>
+            <span class="city">{{ train()?.from }}</span>
             <i class="arrow-icon">→</i>
-            <span class="city">{{ train().to }}</span>
+            <span class="city">{{ train()?.to }}</span>
           </div>
         </div>
         <div class="train-times">
           <div class="time-box">
             <span class="label">გასვლა</span>
-            <span class="val">{{ train().departure }}</span>
+            <span class="val">{{ train()?.departure }}</span>
           </div>
           <div class="time-box">
             <span class="label">ჩასვლა</span>
-            <span class="val">{{ train().arrive }}</span>
+            <span class="val">{{ train()?.arrive }}</span>
           </div>
         </div>
       </div>
@@ -26,7 +26,7 @@
     <section class="vagon-section">
       <h3 class="section-title">აირჩიეთ ვაგონის კლასი</h3>
       <div class="vagon-tabs">
-        @for (vagon of train().vagons || train().carriages; track vagon.id) {
+        @for (vagon of train()?.vagons; track vagon.id) {
           <button
             type="button"
             class="vagon-btn"
